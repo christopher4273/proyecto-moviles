@@ -7,10 +7,27 @@
     tools:context=".login">
 
     <ImageView
+        android:id="@+id/google"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/google"
         android:layout_centerInParent="true"
-        android:id="@+id/google"/>
+        android:src="@drawable/google" />
+
+    <ImageView
+        android:layout_marginTop="120dp"
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="109dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:srcCompat="@mipmap/seo" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_marginTop="230dp"
+        android:layout_height="31dp"
+        android:gravity="center"
+        android:text="Costa Rica’s Pothole roads" />
 
 </RelativeLayout>
