@@ -51,6 +51,10 @@ public class MainActivity extends AppCompatActivity {
             if(rep_edit==null) {
                 dao.add(rep).addOnSuccessListener(suc -> {
                     Toast.makeText(this, "Agregado correctamente", Toast.LENGTH_SHORT).show();
+                    edit_nombrereporte.setText("");
+                    edit_fechareporte.setText("");
+                    edit_severidad.setText("");
+                    edit_estado.setText("");
                 }).addOnFailureListener(er -> {
                     Toast.makeText(this, "" + er.getMessage(), Toast.LENGTH_SHORT).show();
                 });
