@@ -62,7 +62,9 @@ public class MainActivity extends AppCompatActivity {
                 hashMap.put("severidad", edit_severidad.getText().toString());
                 hashMap.put("estado", edit_estado.getText().toString());
                 dao.update(rep_edit.getKey(), hashMap).addOnSuccessListener(suc ->{
-                    Toast.makeText(this, "actualizado correctamente", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Actualizado correctamente", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MainActivity.this, RVActivity.class);
+                    startActivity(intent);
                     finish();
                 }).addOnFailureListener(er ->{
                     Toast.makeText(this, ""+er.getMessage(), Toast.LENGTH_SHORT).show();
