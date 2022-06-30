@@ -4,10 +4,13 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -17,10 +20,23 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 import java.util.HashMap;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
     ImageView img;
+    public String imageUri;
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +57,10 @@ public class MainActivity extends AppCompatActivity {
         //Añadimos el botón a la botonera
         layoutBtnCamera.addView(button);
         //}
+
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,9 +132,41 @@ public class MainActivity extends AppCompatActivity {
             if(result.getResultCode() == RESULT_OK){
                 Bundle extras =  result.getData().getExtras();
                 Bitmap imgBitmap = (Bitmap) extras.get("data");
+                imageUri = String.valueOf(imgBitmap);
+                System.out.println("URI DE LA IMAGEN: "+imageUri);
                 img.setImageBitmap(imgBitmap);
+                uploadPicture();
             }
         }
     });
+
+    private void uploadPicture() {
+
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.setTitle("Uploading image...");
+        pd.show();
+
+        final String randomKey = UUID.randomUUID().toString();
+        StorageReference riversRef = storageReference.child("images/"+randomKey);
+        riversRef.putFile(Uri.parse(imageUri)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                pd.dismiss();
+                Snackbar.make(findViewById(R.id.img), "Image Uploaded.", Snackbar.LENGTH_LONG).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                pd.dismiss();
+                Toast.makeText(getApplicationContext(), "Failed to upload", Toast.LENGTH_LONG).show();
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                pd.setMessage("Porcentage: "+ (int) progressPercent + "%");
+            }
+        });
+    }
 
 }
