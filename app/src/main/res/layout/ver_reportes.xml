@@ -3,18 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="2dp">
+
     <TextView
-        android:layout_width="20sp"
-        android:layout_height="wrap_content"
-        android:text="&#8942;"
-        android:textSize="20sp"
         android:id="@+id/txt_option"
+        android:layout_width="92dp"
+        android:layout_height="45dp"
         android:layout_gravity="right"
-        android:textAlignment="center"/>
+        android:text="&#8942;"
+        android:textAlignment="center"
+        android:textSize="20sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
         <ImageView
             android:layout_width="96dp"
@@ -31,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:text="Text"
                 android:textSize="20sp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="8dp"
                 android:id="@+id/txt_nombrereporte"/>
             <TextView
                 android:layout_width="match_parent"
