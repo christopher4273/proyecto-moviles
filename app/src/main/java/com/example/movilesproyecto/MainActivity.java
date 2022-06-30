@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        setContentView(R.layout.activity_main);
+
         name=findViewById(R.id.name);
         mail=findViewById(R.id.mail);
         logout=findViewById(R.id.logout);

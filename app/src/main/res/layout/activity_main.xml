@@ -39,7 +39,6 @@
         android:textColor="@color/white"
         android:textSize="15sp" />
     <TextView
-        android:id="@+id/mail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
