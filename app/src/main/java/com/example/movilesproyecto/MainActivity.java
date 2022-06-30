@@ -18,10 +18,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -36,7 +43,10 @@ public class MainActivity extends AppCompatActivity {
     public String imageUri;
     private FirebaseStorage storage;
     private StorageReference storageReference;
-
+    Button logout;
+    GoogleSignInOptions gso;
+    GoogleSignInClient gsc;
+    TextView name,mail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,6 +134,39 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+
+        setContentView(R.layout.activity_main);
+        name=findViewById(R.id.name);
+        mail=findViewById(R.id.mail);
+        logout=findViewById(R.id.logout);
+
+        gso=new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        gsc= GoogleSignIn.getClient(this,gso);
+
+        GoogleSignInAccount account=GoogleSignIn.getLastSignedInAccount(this);
+        if (account!=null){
+            String Name=account.getDisplayName();
+            String Mail=account.getEmail();
+            name.setText(Name);
+            mail.setText(Mail);
+        }
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SignOut();
+            }
+        });
+
+
+    }
+    private void SignOut() {
+        gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                finish();
+                startActivity(new Intent(getApplicationContext(),login.class));
+            }
+        });
     }
 
     ActivityResultLauncher<Intent> cameraLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -168,5 +211,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+
+
 
 }
