@@ -1,6 +1,14 @@
 plugins {
     id 'com.android.application'
+    id "org.sonarqube" version "3.4.0.2513"
 
+}
+sonarqube {
+    properties {
+        property "sonar.projectKey", "christopher4273_proyecto-moviles"
+        property "sonar.organization", "christopher4273"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
 }
 apply plugin: 'com.google.gms.google-services'
 android {
